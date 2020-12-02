@@ -1,0 +1,6 @@
+# Expose at http://kibana.k3d.localhost
+ingress:
+  enabled: true
+  hosts:
+    - kibana.k3d.localhost
+  tls: []      

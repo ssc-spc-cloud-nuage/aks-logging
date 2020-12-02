@@ -1,0 +1,45 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: elastic-hostpath-pv-01
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 200M
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/elastic/01"
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: elastic-hostpath-pv-02
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 200M
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/elastic/02"
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: elastic-hostpath-pv-03
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 200M
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/elastic/03"
