@@ -15,18 +15,19 @@ helm repo add rancher-latest https://releases.rancher.com/server-charts/latest &
 helm repo add jetstack https://charts.jetstack.io && \
 helm repo update
 
+kubectl create namespace cert-manager && \
+kubectl create namespace cattle-system
+
 # Create cert-manager CRDs
-kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.15.0/cert-manager.crds.yaml
+kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.crds.yaml
 
 # Install cert-manager
-kubectl create namespace cert-manager && \
 helm install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
-  --version v0.15.0 --wait
+  --version v1.1.0 --wait
 
 # Install rancher
-kubectl create namespace cattle-system && \
 helm install rancher rancher-latest/rancher \
   --namespace cattle-system \
   --set hostname=rancher.k3d.localhost --wait
@@ -38,31 +39,31 @@ helm install rancher rancher-latest/rancher \
 helm repo add elastic https://helm.elastic.co && \
 helm repo update
 
+# Create namespace
+kubectl create namespace elastic
+
 # Create PersistentVolumes 
 kubectl apply -f hostpath-pv.yaml --namespace elastic
 
 # Install Elasticsearch
-kubectl create namespace elastic && \
 helm install elastic elastic/elasticsearch \
 	--values ./values-elasticsearch.yaml \
-	--namespace elasic \
+	--namespace elastic \
 	--wait
-	  
-# Forward port for elasticsearch
-# kubectl port-forward svc/elasticsearch-master 9200 --namespace elastic
 
 # Install Kibana (front-end)
 helm install kibana elastic/kibana \
 	--values ./values-kibana.yaml \
-	--namespace elasic \
+	--namespace elastic \
 	--wait
-
-# Forward port for Kibana
-# kubectl port-forward deployment/kibana-kibana 5601 --namespace elastic
-
 ```
 
 # Install Rancher tools
 Cluster Explorer > Apps & Marketplace:
 1. Monitoring
 1. Logging
+
+# Access
+* https://rancher.k3d.localhost/
+* https://elasticsearch.k3d.localhost/
+* https://kibana.k3d.localhost/
