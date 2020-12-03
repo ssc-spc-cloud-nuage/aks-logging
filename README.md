@@ -3,7 +3,7 @@ Setup localhost Rancher with logging using Fluentd, Elasticsearch and Kibana.
 
 # Setup
 1. Install [docker](https://docs.docker.com/get-docker/), [helm](https://helm.sh/), [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) and [k3d](https://github.com/rancher/k3d).
-1. Create a `~/mnt/elastic/01` and `~/mnt/elastic/02` directories.
+1. Create `~/mnt/elastic/01` and `~/mnt/elastic/02` directories for the PersistentVolumes.
 
 # Rancher
 ```sh
