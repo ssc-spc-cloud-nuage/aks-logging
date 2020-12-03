@@ -1,3 +1,12 @@
+# Scale down resources for local environment
+resources:
+  requests:
+    cpu: "100m"
+    memory: "512M"
+  limits:
+    cpu: "1000m"
+    memory: "512M"
+
 # Expose at http://kibana.k3d.localhost
 ingress:
   enabled: true
