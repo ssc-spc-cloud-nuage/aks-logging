@@ -1,5 +1,5 @@
-# Run as a single node ES cluster
-replicas: 1
+# Run as a 2 node ES cluster
+replicas: 2
 
 # Permit co-located instances for solitary minikube virtual machines.
 antiAffinity: "soft"
