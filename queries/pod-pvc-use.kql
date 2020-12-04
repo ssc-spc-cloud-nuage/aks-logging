@@ -1,0 +1,12 @@
+//
+// View PVC usage
+//
+InsightsMetrics 
+| where TimeGenerated > ago(24h)
+| where Name == "pvUsedBytes"
+| project TagsJson = parse_json(Tags), Val
+| extend namespace = TagsJson["pvcNamespace"]
+| extend pvcName = TagsJson["pvcName"]
+| extend podName = TagsJson["podName"]
+| extend pvUsedMBs = format_bytes(Val)
+| extend pvCapacityMBs = format_bytes(toint(TagsJson["pvCapacityBytes"]))

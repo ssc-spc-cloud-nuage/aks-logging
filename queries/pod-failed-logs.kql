@@ -1,0 +1,15 @@
+//
+// Find logs for all failed pods in past hour
+//
+let startTimestamp = ago(1h); 
+KubePodInventory
+| where TimeGenerated > startTimestamp
+| where PodStatus == "Failed"
+| join kind=leftouter 
+(
+    ContainerLog
+    | where TimeGenerated > startTimestamp
+)
+on ContainerID
+| project ContainerID, Namespace, Name, LogEntry, TimeGenerated
+| order by TimeGenerated desc 
