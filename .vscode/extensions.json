@@ -1,0 +1,6 @@
+{
+	"recommendations": [
+        "rosshamish.kuskus-kusto-syntax-highlighting",
+        "rosshamish.kuskus-kusto-language-server"
+	]
+}

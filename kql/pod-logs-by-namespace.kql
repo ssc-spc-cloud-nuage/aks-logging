@@ -1,0 +1,40 @@
+let startTimestamp = ago(5d);               // All logs within past 5 days
+let namespace = "drupal-wxt-test";          // Namespace to search
+let podLabel = "app.kubernetes.io/name";    // Pod label to search by
+let podLabelValue = "drupal";               // Value of the pod label
+let searchTerm = "foo";                     // Term you're searching for in the logs
+//
+// Limit to namespace and by pod label
+//
+KubePodInventory
+| where TimeGenerated > startTimestamp
+| where Namespace == namespace
+| project ContainerID, PodName=Name, PodLabel, PodLabelJson=parse_json(PodLabel)
+| where PodLabelJson[0][podLabel] == podLabelValue
+| distinct ContainerID, PodName, PodLabel
+//
+// Join on log entries
+//
+| join
+(
+    ContainerLog
+    | where TimeGenerated > startTimestamp
+)
+on ContainerID
+//
+// Join on inventory to get image name and tag
+//
+| join kind=leftouter 
+(
+    ContainerInventory 
+    | where TimeGenerated > startTimestamp 
+    | summarize arg_max(TimeGenerated, *) by ContainerID, Image, ImageTag
+    | project ContainerID, ImageInv=Image, ImageTagInv=ImageTag
+)
+on ContainerID
+| project ContainerID, PodName, PodLabel, TimeGenerated, ImageInv, ImageTagInv, LogEntry
+| order by TimeGenerated desc
+//
+// Search for specific text in log
+//
+| search LogEntry:searchTerm
